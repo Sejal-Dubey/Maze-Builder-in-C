@@ -1,1 +1,152 @@
+Here’s the content for the **Algorithm.md** file, which explains the algorithm and data structures used in your project.
 
+---
+
+# **Algorithm Explanation: Interactive Maze Builder in C**
+
+This document provides a detailed explanation of the key algorithm and data structures used in the **Interactive Maze Builder in C** project.
+
+---
+
+## **Algorithm: Breadth-First Search (BFS)**
+
+Breadth-First Search is the core algorithm used to solve the maze and find the shortest path from the start (`S`) to the end (`E`). BFS is ideal for this problem because it guarantees the shortest path in an unweighted graph like our maze.
+
+---
+
+### **Steps in BFS for Maze Solving**
+
+1. **Represent the Maze as a Graph**:
+   - Each cell in the maze is treated as a node.
+   - An edge exists between two nodes if you can move from one cell to another (e.g., up, down, left, or right) without hitting a wall (`W`).
+
+2. **Initialize the BFS**:
+   - Start at the node corresponding to `S` (start position).
+   - Use a **queue** to keep track of nodes to visit.
+   - Maintain a **visited** array to track which nodes have already been explored.
+
+3. **Explore Neighboring Nodes**:
+   - For the current node, check all valid neighboring nodes (up, down, left, right).
+   - If a neighboring node is not a wall (`W`) and has not been visited, mark it as visited and add it to the queue.
+
+4. **Track the Path**:
+   - Use a **parent array** to store the previous node for each visited node. This helps reconstruct the shortest path after reaching the end (`E`).
+
+5. **End Condition**:
+   - If the end node (`E`) is reached during BFS, stop the search and backtrack using the parent array to construct the path.
+
+6. **Output the Solved Maze**:
+   - Mark the path in the maze (e.g., replacing open spaces with `1`) and display the result.
+
+---
+
+### **Pseudocode**
+Here’s a high-level pseudocode for the BFS algorithm:
+
+```plaintext
+function BFS(start, end, maze):
+    Initialize a queue
+    Initialize a visited array (all False)
+    Initialize a parent array to reconstruct the path
+    
+    Enqueue the start node into the queue
+    Mark the start node as visited
+
+    while queue is not empty:
+        current = dequeue(queue)
+        
+        if current == end:
+            reconstruct_path(parent, start, end)
+            return True
+        
+        for each neighbor of current:
+            if neighbor is not a wall and not visited:
+                Enqueue neighbor into the queue
+                Mark neighbor as visited
+                parent[neighbor] = current
+
+    return False  # If the end node is not reachable
+```
+
+---
+
+## **Data Structures**
+
+### **1. Adjacency List**
+The maze is represented as a graph using an adjacency list:
+- Each cell corresponds to a node.
+- Each node stores a list of neighboring nodes (valid moves).
+
+This representation is memory-efficient, as only valid moves are stored as edges.
+
+---
+
+### **2. Queue**
+A queue is used to implement the BFS algorithm. It follows the **First-In-First-Out (FIFO)** principle:
+- Nodes are added to the queue when they are discovered.
+- Nodes are removed from the queue when they are processed.
+
+---
+
+### **3. Visited Array**
+The visited array is used to ensure each node is processed only once during the BFS traversal. It prevents infinite loops and redundant processing.
+
+---
+
+### **4. Parent Array**
+The parent array stores the previous node for each visited node. This is crucial for reconstructing the shortest path from the start (`S`) to the end (`E`).
+
+---
+
+## **Complexity Analysis**
+
+### **Time Complexity**
+- **BFS Traversal**: \(O(V + E)\), where:
+  - \(V\): Number of nodes (cells in the maze).
+  - \(E\): Number of edges (valid moves between cells).
+- In the worst case, every cell in the maze is visited once, and every edge is explored once.
+
+### **Space Complexity**
+- **Queue**: Stores up to \(O(V)\) nodes in the worst case.
+- **Visited Array**: Requires \(O(V)\) space.
+- **Adjacency List**: Requires \(O(V + E)\) space.
+
+---
+
+## **Path Reconstruction**
+
+After reaching the end node (`E`), the path is reconstructed using the parent array:
+1. Start from `E` and follow the parent pointers backward to `S`.
+2. Mark the cells in the path (e.g., replace open spaces with `1`).
+3. Output the modified maze.
+
+---
+
+## **Visualization Example**
+
+### Input Maze:
+```
+S W   W  
+  W    
+ W W   
+       
+W  W  E
+```
+
+### BFS Traversal:
+1. Start from `S` and explore neighbors.
+2. Visit valid nodes and enqueue them.
+3. Continue until `E` is reached.
+
+### Output Maze (Path Highlighted):
+```
+{ '1', 'W', '0', 'W', '0' },
+{ '1', '1', 'W', '0', '0' },
+{ '0', 'W', '0', 'W', '0' },
+{ '0', '0', '1', '1', '1' },
+{ 'W', '0', 'W', '0', '1' }
+```
+
+---
+
+This document serves as a technical reference for understanding the algorithm and its implementation in the project. For further details, refer to the main source code in `src/maze_solver.c`.
